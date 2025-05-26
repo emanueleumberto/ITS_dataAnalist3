@@ -283,3 +283,42 @@ ln.pop(3)
 print(ln)
 ln.remove('Rieti')
 print(ln)
+
+for e in l:
+    print(e)
+    
+i = 0
+while (i < len(l)):
+    print(l[i])
+    i += 1
+    
+# Lezione 5
+# - Tuple -> Collezione di dati ORDINATE, IMMUTABILI 
+#            e permettono DUPLICATI 
+# tuple() | type() | len() | count();
+# è possibile accedere ad elementi di una tupla tramite un indice
+# t[i] | t[i:n] | t[:n] | t[i:] | t[-i:-n]
+# non è possibile modificare una tupla
+# è possibile unire due o più tuple con +
+# è possibile fare l'unpack di una tupla
+# (t1, t2, t3, t4) = t
+# è possibile iterare una lista tramite for o while
+
+ta = ('Roma', 'Napoli', 'Milano', 'Roma')
+t = tuple(('Roma', 'Napoli', 'Milano', 'Roma'))
+print(t, type(t), len(t), t.count('Roma'))
+
+l = list(t)
+l.append('Torino')
+t = tuple(l)
+print(t, type(t), len(t), t.count('Roma'))
+
+t1 = t[0]
+t1, t2 = t[0], t[1]
+(t1, t2, t3, t4, t5) = t
+print(t1, t2, t3, t4, t5)
+(t1, t2, *t3, t4) = t
+print(t1, t2, t3, t4)
+
+bigt = ta + t
+print(bigt)
