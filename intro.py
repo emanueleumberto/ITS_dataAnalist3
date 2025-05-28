@@ -322,3 +322,85 @@ print(t1, t2, t3, t4)
 
 bigt = ta + t
 print(bigt)
+
+# Lezione 6
+
+# - Set   -> Collezione di dati NON ORDINATE e per questo non indicizzabile, 
+#       NON MODIFICABILI e NON permettono duplicati
+# s = {'Roma', 'Napoli', 'Milano'}
+# set() | type() | len()
+# NON è possibile modificare valori di un set perchè non abiamo un indice
+# è possibile aggiungere elementi ad un set  -> add(val)
+# è possibile rimuovere degli elementi da un set
+# remove(val) | pop() | del s | clear()
+# è possibile unire due o più set con union() -> 
+#   Crea un nuovo set con tutti i dati dei set uniti senza duplicati (Full Join)
+# è possibile unire due o più set con intersection() -> 
+#   Crea un nuovo set con tutti i valori comuni (Inner Join)
+# è possibile unire due o più set con difference() ->
+#   Crea un nuovo set con tutti i valori del set principale (Left Join)
+# è possibile unire due o più set con symmetric_difference() ->
+#   Crea un nuovo set con tutti i valori non comuni (Contrario di Inner Join)
+
+s1 = {'Roma', 'Napoli', 'Milano'}
+s2 = set(('Torino', 'Roma', 'Firenze', 'Napoli'))
+print(type(s1))
+print(len(s1))
+
+s1.add('Palermo')
+s1.remove('Palermo')
+
+s_union = s1.union(s2) # {'Roma', 'Napoli', 'Milano', 'Torino', 'Firenze'}
+print('set union: ',s_union)
+s_intersection = s1.intersection(s2) # {'Roma', 'Napoli'}
+print('set intersection: ',s_intersection)
+s_difference = s1.difference(s2) # {'Milano'}
+print('set difference : ',s_difference)
+s_symmetric_difference = s1.symmetric_difference(s2) # {'Milano', 'Torino', 'Firenze'}
+print('set symmetric difference : ',s_symmetric_difference)
+
+# - Dictionary -> Collezione di dati ORDINATE, MODIFICABILI e NON permettono duplicati
+#  I dizionari sono un insieme di coppie chiave/valore, sono l'equivalente degli
+#  oggetti in altri linguaggi
+#   d = {"nome": "Mario", "cognome": "Rossi", "citta": "Roma"}
+# dict() | type() | len()
+# è possibile accedere ai valori di un dizionario tramite la chiave -> d[chiave]
+# è possibile modificare valori di un dizionario tramite una chiave -> 
+#   d[chiave] = nuovoValore| d.update({chiave: nuovoValore})
+# è possibile rimuovere dati da un dizionario ->
+#   pop(chiave) | del d[chiave] | del d | clear()
+# è possibile copiare un dizionario nd = d.copy() | nd = dict(d)
+# è possibile iterare un dizionario tramite il for
+
+d1 = {"nome": "Mario", "cognome": "Rossi", "citta": "Roma", "anni": 45}
+print(d1)
+d2 = dict({"nome": "Mario", "cognome": "Rossi", "citta": "Roma", "anni": 45})
+print(d2)
+print(type(d1))
+print(len(d1))
+print(f"Ciao sono {d1['nome']} {d1['cognome']}")
+d1['cognome'] = 'Verdi'
+d1.update({"citta": "Milano"})
+print(f"Ciao sono {d1['nome']} {d1['cognome']}")
+
+# d1.pop("citta")
+# del d1["anni"]
+# d1.clear()
+# del d1
+# print(d1)
+
+dc = d1.copy()
+dc = dict(d1)
+print(dc)
+
+for k in d1: # itera le chiavi di un dizionario
+    print(k, d1[k])
+    
+for k in d1.keys(): # itera le chiavi di un dizionario
+    print(k)
+    
+for v in d1.values(): # itera i valori di un dizionario
+    print(v)
+    
+for i in d1.items(): # itera le coppie chiave/valore di un dizionario
+    print(i)

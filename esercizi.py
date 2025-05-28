@@ -213,7 +213,7 @@ def estrai_prezzo(libro):
 libroCostoso = max(catalogo, key=estrai_prezzo)
 
 # Soluzione 3
-libroCostoso = max(catalogo, key=lambda x: x[3])
+libroCostoso = max(catalogo, key=lambda libro: libro[3])
 print(f"📖 Libro più costoso: {libroCostoso[0]} di {libroCostoso[1]}, €{libroCostoso[3]:.2f}")
 
 # - Poiché le tuple sono immutabili, spiega in un commento come 
@@ -226,3 +226,30 @@ print(f"Vecchio: {vecchio_libro}")
 print(f"Nuovo:  {nuovo_libro}")
 
 print('----------------------------------------------')
+
+
+# Esercizio 5
+
+# Sei incaricato di gestire le iscrizioni a due eventi: 
+# Python Day e Data Science Lab. 
+# Ogni partecipante fornisce il proprio nome, cognome, città e età. 
+# Alcuni partecipanti possono iscriversi a entrambi gli eventi. 
+# Il tuo compito è analizzare i dati raccolti utilizzando set e dizionari.
+# - Tramite un ciclo effettuare la registrazione di partecipanti e 
+#   prevedere un fine registrazione.
+# - Richiedere all'utente tramite input di inserire N partecipanti al Python Day, 
+#   fornendo per ciascun iscritto il nome, il cognome, la città ed età 
+#   (es. Alice,Neri,Roma,30).
+# - Richiedere all'utente di inserire i partecipanti al Data Science Lab, 
+#   con le stesse modalità.
+# - Memorizzare i dati in dizionari, dove le chiavi sono nome,cognome,citta ed eta  
+# - Controllare le età degli iscritti e se superiore a 20 salvarli 
+#   in un set di nome PythonDay o DataScienceLab altrimenti stampare un errore.
+# - Utilizzare i set per determinare:
+#       L'insieme completo dei partecipanti unici.
+#       I partecipanti iscritti a entrambi gli eventi.
+#       I partecipanti esclusivi di ciascun evento.
+# - Stampare:
+#       il numero totale e i partecipanti a ciascun evento
+#       il numero totale e i partecipanti unici    
+#       il numero totale e i partecipanti esclusivi di ciascun evento. 
