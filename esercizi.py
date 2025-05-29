@@ -253,3 +253,191 @@ print('----------------------------------------------')
 #       il numero totale e i partecipanti a ciascun evento
 #       il numero totale e i partecipanti unici    
 #       il numero totale e i partecipanti esclusivi di ciascun evento. 
+
+st = 'Alice,Neri,Roma,30'
+s = st.split(',') # ['Alice', 'Neri', 'Roma', 30]
+s[0].strip() # Alice
+
+python_day = set(('Alice,Neri,Roma,30', 'Mario,Rossi,Milano,35', 'Francesca,Neri,Palermo,22'))
+data_science_lab = set(('Giuseppe,Verdi,Torino,54', 'Alice,Neri,Roma,30', 'Antonio,Bianchi,Firenze,52'))
+
+print('--------- Registrazione Partecipanti --------------')
+while True:
+    dati = input("Inserisci dati partecipante es.Alice,Neri,Roma,30 o fine per terminare: ").strip()
+    if dati.strip().lower() == 'fine':
+        break
+    dati_partecipante = dati.split(',')
+    if len(dati_partecipante) == 4:
+        eta = int(dati_partecipante[3])
+        if eta > 20:
+            """ partecipante_dict= {
+                'nome': dati_partecipante[0],
+                'cognome': dati_partecipante[1],
+                'citta': dati_partecipante[2],
+                'eta': eta
+            }
+            print(type(partecipante_dict), partecipante_dict) """
+            
+            while True:
+                print('A quale evento vuoi registrarti?')
+                dati_evento = input('1 - Python Day | 2 - Data Science Lab -> ')
+                if(dati_evento not in ['1', '2']):
+                    print('Evento non corretto...')
+                else:
+                    if dati_evento == '1':
+                        print(f"Registrazione effettuata a Python Day")
+                        python_day.add(dati)
+                    else:
+                        print(f"Registrazione effettuata a Data Science Lab")
+                        data_science_lab.add(dati)
+                    break
+        else:
+           print('Età inferiore a 20... non puoi registrarti all\'evento') 
+    else:
+        print('Formato valori inseriti errato, es.Alice,Neri,Roma,30')
+    
+
+# L'insieme completo dei partecipanti unici.
+partecipanti_unici = python_day.union(data_science_lab)
+# print(partecipanti_unici)
+# partecipanti_unici = python_day | data_science_lab
+# print(partecipanti_unici)
+
+# I partecipanti iscritti a entrambi gli eventi.
+partecipanti_comuni = python_day.intersection(data_science_lab)
+# print(partecipanti_comuni)
+# partecipanti_comuni = python_day & data_science_lab
+# print(partecipanti_comuni)
+
+# I partecipanti esclusivi di ciascun evento.
+partecipanti_python_day = python_day.difference(data_science_lab)
+# print(partecipanti_python_day)
+# partecipanti_python_day = python_day - data_science_lab
+# print(partecipanti_python_day)
+partecipanti_data_science_lab = data_science_lab.difference(python_day)
+
+# print(python_day)
+# print(data_science_lab)
+
+# - Stampare:
+#       il numero totale e i partecipanti a ciascun evento
+#       il numero totale e i partecipanti unici    
+#       il numero totale e i partecipanti esclusivi di ciascun evento. 
+
+""" print('Numero totale e i partecipanti a ciascun evento')
+print(' ***** Python Day *****')
+for partecipante in python_day:
+    dati_partecipante = partecipante.split(',')
+    partecipante_dict= {
+        'nome': dati_partecipante[0],
+        'cognome': dati_partecipante[1],
+        'citta': dati_partecipante[2],
+        'eta': eta
+    }
+    print(f"    Partecipante: {partecipante_dict['nome']} {partecipante_dict['cognome']} anni {partecipante_dict['eta']} - {partecipante_dict['citta']}")
+print(f"Numero totale partecipanti: {len(python_day)}")
+
+print(' ***** Data Science Lab *****')
+for partecipante in data_science_lab:
+    dati_partecipante = partecipante.split(',')
+    partecipante_dict= {
+        'nome': dati_partecipante[0],
+        'cognome': dati_partecipante[1],
+        'citta': dati_partecipante[2],
+        'eta': eta
+    }
+    print(f"    Partecipante: {partecipante_dict['nome']} {partecipante_dict['cognome']} anni {partecipante_dict['eta']} - {partecipante_dict['citta']}")
+print(f"Numero totale partecipanti: {len(data_science_lab)}")
+
+print()
+print('Numero totale e i partecipanti unici')
+print(' ***** Partecipanti unici *****')
+for partecipante in partecipanti_unici:
+    dati_partecipante = partecipante.split(',')
+    partecipante_dict= {
+        'nome': dati_partecipante[0],
+        'cognome': dati_partecipante[1],
+        'citta': dati_partecipante[2],
+        'eta': eta
+    }
+    print(f"    Partecipante: {partecipante_dict['nome']} {partecipante_dict['cognome']} anni {partecipante_dict['eta']} - {partecipante_dict['citta']}")
+print(f"Numero totale partecipanti: {len(partecipanti_unici)}")
+
+print()
+print('Numero totale e partecipanti iscritti ad entrambi gli eventi')
+print(' ***** Partecipanti comuni *****')
+for partecipante in partecipanti_comuni:
+    dati_partecipante = partecipante.split(',')
+    partecipante_dict= {
+        'nome': dati_partecipante[0],
+        'cognome': dati_partecipante[1],
+        'citta': dati_partecipante[2],
+        'eta': eta
+    }
+    print(f"    Partecipante: {partecipante_dict['nome']} {partecipante_dict['cognome']} anni {partecipante_dict['eta']} - {partecipante_dict['citta']}")
+print(f"Numero totale partecipanti: {len(partecipanti_comuni)}")
+
+print()
+print('Numero totale e partecipanti esclusivi di Python Day')
+print(' ***** Partecipanti esclusivi di Python Day *****')
+for partecipante in partecipanti_python_day:
+    dati_partecipante = partecipante.split(',')
+    partecipante_dict= {
+        'nome': dati_partecipante[0],
+        'cognome': dati_partecipante[1],
+        'citta': dati_partecipante[2],
+        'eta': eta
+    }
+    print(f"    Partecipante: {partecipante_dict['nome']} {partecipante_dict['cognome']} anni {partecipante_dict['eta']} - {partecipante_dict['citta']}")
+print(f"Numero totale partecipanti: {len(partecipanti_python_day)}")
+
+print()
+print('Numero totale e partecipanti esclusivi di Data Science Lab')
+print(' ***** Partecipanti esclusivi di Data Science Lab *****')
+for partecipante in partecipanti_data_science_lab:
+    dati_partecipante = partecipante.split(',')
+    partecipante_dict= {
+        'nome': dati_partecipante[0],
+        'cognome': dati_partecipante[1],
+        'citta': dati_partecipante[2],
+        'eta': eta
+    }
+    print(f"    Partecipante: {partecipante_dict['nome']} {partecipante_dict['cognome']} anni {partecipante_dict['eta']} - {partecipante_dict['citta']}")
+print(f"Numero totale partecipanti: {len(partecipanti_data_science_lab)}")
+ """
+ 
+ 
+# Soluzione con utilizzo di funzioni
+def stampaPartecipanti(titolo, partecipanti):
+    print('/n')
+    print(f" ***** Partecipanti esclusivi di {titolo} *****")
+    for partecipante in partecipanti:
+        dati_partecipante = partecipante.split(',')
+        partecipante_dict= {
+            'nome': dati_partecipante[0],
+            'cognome': dati_partecipante[1],
+            'citta': dati_partecipante[2],
+            'eta': eta
+        }
+        print(f"    Partecipante: {partecipante_dict['nome']} {partecipante_dict['cognome']} anni {partecipante_dict['eta']} - {partecipante_dict['citta']}")
+    print(f"Numero totale partecipanti: {len(partecipanti)}")
+    
+stampaPartecipanti('Python Day', python_day)
+stampaPartecipanti('Data Science Lab', data_science_lab)
+stampaPartecipanti('Partecipanti unici', partecipanti_unici)
+stampaPartecipanti('Partecipanti comuni', partecipanti_comuni)
+stampaPartecipanti('Partecipanti esclusivi di Python Day', partecipanti_python_day)
+stampaPartecipanti('Partecipanti esclusivi di Data Science Lab', partecipanti_data_science_lab)
+
+print('------- Fine -------')
+
+
+# Esercizio 6
+
+# Chiedere all'utente tramite input il numero di registrazioni 
+# da effettuare,
+# tramite una funzione registrare n utenti con questa forma
+# {'firstname': '', 'lastname': '', 'age': '', 'city': ''}
+# inserire gli utenti in una lista e ritornare la lista
+# Tramite una seconda funzione, passare la lista di utenti registrati 
+# come paramentro e stampare nel terminale il contenuto

@@ -404,3 +404,31 @@ for v in d1.values(): # itera i valori di un dizionario
     
 for i in d1.items(): # itera le coppie chiave/valore di un dizionario
     print(i)
+    
+    
+# Funzioni in Python
+# Creazione di una funzione in python
+# def nomeFunc(?parametri)
+#   blocco di istruzioni
+# Per eseguire una funzione -> nomeFunc()
+# Per eseguire una funzione -> nomeFunc(param1, param2, ..., paramN)
+# Per eseguire una funzione cone paramentri variabili -> nomeFunc(*params)
+# Una funzione in python può avere dei valori di ritorno
+
+def saluta():
+    print("Ciao a tutti!!!")
+    
+def somma(num1, num2):
+    res = num1 + num2
+    print(f"Il risultato della somma tra {num1} e {num2} è: {res}")
+    
+def sommaTutto(*nums):
+    #print(nums)
+    res = 0
+    for n in nums:
+        res += n
+    #print(f"Il risultato della somma è: {res}")
+    return res
+    
+r = sommaTutto(8,3,6,34,2)
+print(r)
