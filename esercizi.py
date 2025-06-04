@@ -487,3 +487,9 @@ stampa(userList)
 #   Importa genera_profili da generatore.py
 #   Chiede all’utente quanti profili generare.
 #   Visualizza i profili in output, ben formattati.
+
+import generatore as g
+
+numProfili = int(input('Quanti profili utente vuoi generare?'))
+listaProfili = g.genera_profili(numProfili)
+g.stampa_profili(listaProfili)

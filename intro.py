@@ -487,3 +487,5 @@ print(gf.book())
 print(gf.american_president())
 print(gf.car_brand())
 print(gf.drink())
+print(gf.random_date())
+
