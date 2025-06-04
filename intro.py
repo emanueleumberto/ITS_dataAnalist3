@@ -432,3 +432,58 @@ def sommaTutto(*nums):
     
 r = sommaTutto(8,3,6,34,2)
 print(r)
+
+# Lezione 7
+
+# Moduli
+# Un modulo è un file esterno che può contenere variabili, funzioni, classi, oggetti ecc
+# Per poter utilizzare un modulo si deve importare nel progetto
+# possiamo utilizzare degli alias per importare un modulo
+# import miomodulo as mm
+# abbiamo tutta una serie di moduli built in o moduli di terze parti 
+# dir(nomemodulo) -> stampo tutti i metodi del modulo   
+
+import miomodulo as mm # importo gli elementi definiti nel file miomodulo.py
+# import math # importo l'intera libreria math nel progetto
+from math import sqrt, floor, ceil # importo solo la funzione sqrt del modulo math
+import platform as p # importo un modulo per la lettura del device con cui mi sto collegando
+import datetime as d # importo un modulo per la gestione delle date
+
+print(mm.miaVar) # utilizzo la variabile miaVar definita nel modulo miomodulo.py
+print(mm.miaFunc()) # utilizzo la funzione maiFunc() definita nel modulo miomodulo.py
+
+# Esempi modulo math
+num = 12.9
+# print(math.sqrt(num))
+# print(math.floor(num))
+# print(math.ceil(num))
+print(sqrt(num))
+print(floor(num))
+print(ceil(num))
+
+# Esempi modulo platform
+print(p.architecture())
+print(p.processor())
+print(p.system())
+print(p.python_version())
+print(p.machine())
+
+# Esempi modulo datetime
+print(d.datetime.now())
+print(d.date.today())
+print(d.datetime.now().strftime("%H:%M"))
+print(d.date.today().strftime("%d-%m-%Y"))
+
+# PIP
+# Installatore di pacchetti per python
+# pip --version -> verifica la presenza e la versione di PIP installata
+# py -m pip install --upgrade pip  -> aggiornamento di PIP
+# https://pypi.org/ -> Python package
+# https://pypi.org/project/Genuine-fake/
+
+from genuine.fake import GenuineFake as gf
+print(gf.name())
+print(gf.book())
+print(gf.american_president())
+print(gf.car_brand())
+print(gf.drink())

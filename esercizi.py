@@ -441,3 +441,49 @@ print('------- Fine -------')
 # inserire gli utenti in una lista e ritornare la lista
 # Tramite una seconda funzione, passare la lista di utenti registrati 
 # come paramentro e stampare nel terminale il contenuto
+
+def registrazione(num):
+    users = []
+    while len(users) < int(num):
+        user = {'firstname': '', 'lastname': '', 'age': '', 'city': ''}
+
+        user['firstname'] = input('Inserisci il nome: ')
+        user['lastname'] = input('Inserisci il cognome: ')
+        user['age'] = input('Inserisci età: ')
+        user['city'] = input('Inserisci città: ')
+        
+        users.append(user)
+    return users
+    
+def stampa(users):
+    for ele in users:
+        print(f"Ciao {ele['firstname']} {ele['lastname']} - {ele['city']} | anni: {ele['age']}")
+        
+print('------------------------------------------------')
+    
+numRegistrazioni = input('Inserisci il numero di registrazioni che vuoi fare: ')
+userList = registrazione(numRegistrazioni)
+stampa(userList) 
+
+print('------------------------------------------------')
+
+numRegistrazioni = input('Inserisci il numero di registrazioni che vuoi fare: ')
+userList = registrazione(numRegistrazioni)
+stampa(userList) 
+
+# Esercizio 7
+
+# Creare un’applicazione Python per simulare la generazione di profili utente 
+# utilizzando un modulo esterno (genuine-fake) e 
+# organizzare il progetto con file separati
+# generatore.py:
+#   Importa GenuineFake dal modulo genuine-fake.
+#   Definisce una funzione genera_profili(n) che:
+#       Genera n profili fittizi contenenti:
+#           Nome completo, Email, Data di nascita, eta(calcolata)
+#           Indirizzo (città + stato), data creazione(datetime)
+#       Restituisce i dati come lista di dizionari.
+# main.py:
+#   Importa genera_profili da generatore.py
+#   Chiede all’utente quanti profili generare.
+#   Visualizza i profili in output, ben formattati.
