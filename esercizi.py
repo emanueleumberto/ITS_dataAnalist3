@@ -493,3 +493,43 @@ import generatore as g
 numProfili = int(input('Quanti profili utente vuoi generare?'))
 listaProfili = g.genera_profili(numProfili)
 g.stampa_profili(listaProfili)
+
+
+# Esercizio 8
+
+#Scrivere un programma Python che gestisca una rubrica di contatti 
+# (nome, cognome, email, telefono), permettendo all’utente di 
+# aggiungere nuovi contatti, salvarli su file e leggerli successivamente, 
+# con un’attenta gestione delle eccezioni in caso di errori.
+#
+# Tramite una interfaccia da terminale L’utente può scegliere una 
+# delle seguenti operazioni:
+#   -> Aggiungi un nuovo contatto
+#   -> Visualizza i contatti salvati
+#   -> Esci
+#
+# Aggiunta contatto
+#   Richiedere all’utente: nome, cognome, email, telefono.
+#   Validare i dati:
+#       Email deve contenere @.
+#       Telefono deve essere numerico.
+#       Gestire eventuali errori di input con try/except.
+# Scrittura su file
+#   Salvare i dati su un file di testo (rubrica.txt) o CSV.
+#   Ogni contatto è salvato su una riga, separato da ,
+# Lettura da file
+#   Quando l’utente sceglie “Visualizza contatti”, leggere il file 
+#       e mostrare i contatti formattati.
+#   Gestire eccezioni:
+#       File non trovato (FileNotFoundError)
+#       File vuoto
+#       Errore nella decodifica
+# Gestione delle eccezioni
+#   Utilizzare blocchi try/except per:
+#       Errori nell’apertura/scrittura/lettura del file
+#       Input non valido (email, telefono)
+#       Eccezioni generiche
+#       Utilizzare finally per stampare un messaggio finale 
+#       in ogni caso (es. “Operazione completata”).
+# Esempio di rubrica.txt:
+#   Mario,Rossi,mario.rossi@gmail.com,3281234567

@@ -448,6 +448,7 @@ import miomodulo as mm # importo gli elementi definiti nel file miomodulo.py
 from math import sqrt, floor, ceil # importo solo la funzione sqrt del modulo math
 import platform as p # importo un modulo per la lettura del device con cui mi sto collegando
 import datetime as d # importo un modulo per la gestione delle date
+import random as rand # importo un modulo per la gestione di valori casuali
 
 print(mm.miaVar) # utilizzo la variabile miaVar definita nel modulo miomodulo.py
 print(mm.miaFunc()) # utilizzo la funzione maiFunc() definita nel modulo miomodulo.py
@@ -474,6 +475,16 @@ print(d.date.today())
 print(d.datetime.now().strftime("%H:%M"))
 print(d.date.today().strftime("%d-%m-%Y"))
 
+# Esempi modulo random
+
+numRand = rand.randint(1,13) # ritorna un valore intero compreso tra a e b
+numRand = rand.random() # ritorna una valore float compreso tra 0 e 1
+cities = ['Roma', 'Napoli', 'Milano']
+valueRand = cities[rand.randint(0, len(cities))]
+valueRand = rand.choice(cities) # ritorna un valore casuale compreso in un insieme di dati
+print(numRand)
+print(valueRand)
+
 # PIP
 # Installatore di pacchetti per python
 # pip --version -> verifica la presenza e la versione di PIP installata
@@ -489,3 +500,99 @@ print(gf.car_brand())
 print(gf.drink())
 print(gf.random_date())
 
+# Lezione 8
+
+# Gestione degli errori ed Eccezioni in Python
+# Try -> Except -> [Else] -> [Finally]
+# Try -> Istruzioni da controllare e che potrebbero causare un blocco dell'app
+# Except -> Istruzioni da eseguire nel caso ci sia un problema
+# [Else] -> (Facoltativo) Istruzioni da eseguire se tutto va a buon fine
+# [Finally] -> (Facoltativo) Istruzioni da eseguire sempre
+# Gestione multipla delle eccezioni
+# except nameExcept1: -> Istruzioni da eseguire se si verifica nameExcept1
+# except nameExcept2: -> Istruzioni da eseguire se si verifica nameExcept2
+# except Exception: -> Istruzioni da eseguire se si verifica qualunque altro problema
+# Sollevare manualmente delle eccezioni -> raise
+# raise Exception()
+
+print('---------- Test app ------------')
+while True:
+    try:
+        num1 = int(input('Inserisci un numero: '))
+        num2 = int(input('Inserisci un numero: '))
+        res = num1 / num2
+        if res%2 == 0:
+            # print("Non voglio i numeri pari")
+            raise Exception("Non voglio i numeri pari")
+    except ValueError as e:
+        # print('Hai inserito un valore errato!!!')
+        print('Err ' + e.args[0])
+    except ZeroDivisionError as e:
+        # print('Non puoi dividere per 0!!!')
+        print('Err ' + e.args[0])
+    except Exception as e:
+        print('Err ' + e.args[0])
+    else:
+        print(res)
+        break
+    finally:
+        print("Operazione completata")
+    
+print('---------- FINE ------------')
+
+# Lavorare con i file in python
+#   open(nomefile, action)
+# Creare file, se già esiste solleva una eccezione di tipo FileExistsError
+#   action create -> 'x'
+#   open('miofile.txt', 'x')
+# Leggere un file
+#   action read -> 'r'
+#   f = open('miofile.txt', 'r')
+# Scrivere su un file
+#   action write -> 'w'
+#   open('miofile.txt', 'w')
+# Appendere su un file
+#   action append -> 'a'
+#   open('miofile.txt', 'a')
+# Eliminare un file
+#   remove('miofile.txt')
+
+import os
+
+filename = 'miofile.txt'
+
+# Controllo se il file esiste, altrimenti lo crea
+if not os.path.exists(filename):
+    open(filename, 'x')
+    
+# Leggo un file in modalità scrittura e scrivo del testo
+try:
+    f = open(filename, 'w')
+    f.write('Questo è un testo generato da python... \n')
+
+    f = open(filename, 'a')
+    f.write('Altro testo generato con python!')
+except Exception as e:
+    print('Err ' + e.args[0])
+else:
+    print('Scrittura su file completata con successo!!!')
+finally:
+    f.close()
+    
+# Leggo un file
+try:
+    f = open(filename, 'r')
+    txt = f.read() # Legge il contentuto del file e lo salva in una variabile
+    # txt = f.read(10) # Legge i primi (10) caratteri contenuti nel file 
+    # txt = f.readline() # Legge la prima riga di testo contenuta nel file 
+except Exception as e:
+    print('Err ' + e.args[0])
+else:
+    print(txt)
+finally:
+    f.close()
+    
+# Controlle se un file esiste e lo cancello
+if os.path.exists(filename):
+    os.remove(filename)
+    print(filename + ' deleted!!!')
