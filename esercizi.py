@@ -533,3 +533,63 @@ g.stampa_profili(listaProfili)
 #       in ogni caso (es. “Operazione completata”).
 # Esempio di rubrica.txt:
 #   Mario,Rossi,mario.rossi@gmail.com,3281234567
+
+import os
+rubrica = 'rubrica.txt'
+
+def menu():
+    print('1 -> Aggiungi un nuovo contatto')
+    print('2 -> Visualizza i contatti salvati')
+    print('0 -> Esci')
+    return int(input('Scegli un valore compreso tra 1, 2, 0: '))
+
+def aggiungi_contatto():
+    try:
+        nome = input('Inserisi il nome: ')
+        cognome = input('Inserisici il cognome: ')
+        email = input('Inserisci email: ')
+        telefono = input('Inserisci telefono: ').replace('.', '').replace(' ', '')
+        
+        if(len(nome) < 3 or len(cognome) < 3):
+            raise ValueError('Nome e/o cognome errati!')
+        if('@' not in email):
+            raise ValueError('Email non valida, deve contenere un carattere @')
+        if(not telefono.isdigit()):
+            raise ValueError('Telefono non valido, deve contenere solo numeri')
+        
+        f = open(rubrica, 'a')
+        riga = f"{nome},{cognome},{email},{telefono}\n"
+        f.write(riga)
+        
+    except ValueError as e:
+        print('Error: ' + e)
+    except Exception as e:
+        print('Error: ' + e)
+    finally:
+        f.close()
+        print("Operazione di inserimento terminata!")
+    
+def visualizza_contatti():
+    if(not os.path.exists(rubrica)):
+        raise FileNotFoundError("Il file rubrica non esiste!!!")
+    
+    f = open(rubrica, 'r')
+    contatti = f.readlines()
+    
+    if(not contatti): 
+        print('Nessun contatto salvato nel file.')
+        return
+    
+    print('Elenco Contatti salvati')
+    for contatto in enumerate(contatti, 1):
+        print(contatto)
+        
+while True:
+    scelta = menu()
+    if(scelta == 1):
+        aggiungi_contatto()
+    elif(scelta == 2):
+        visualizza_contatti()
+    elif(scelta == 0):
+        print('Termine programma!')
+        break
