@@ -585,6 +585,7 @@ try:
     txt = f.read() # Legge il contentuto del file e lo salva in una variabile
     # txt = f.read(10) # Legge i primi (10) caratteri contenuti nel file 
     # txt = f.readline() # Legge la prima riga di testo contenuta nel file 
+    # txt = f.readlines() # Legge tutte le righe di testo contenuta nel file 
 except Exception as e:
     print('Err ' + e.args[0])
 else:

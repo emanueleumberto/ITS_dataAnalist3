@@ -538,6 +538,7 @@ import os
 rubrica = 'rubrica.txt'
 
 def menu():
+    print()
     print('1 -> Aggiungi un nuovo contatto')
     print('2 -> Visualizza i contatti salvati')
     print('0 -> Esci')
@@ -557,33 +558,44 @@ def aggiungi_contatto():
         if(not telefono.isdigit()):
             raise ValueError('Telefono non valido, deve contenere solo numeri')
         
-        f = open(rubrica, 'a')
+        f = open(rubrica, 'a', encoding="utf-8")
         riga = f"{nome},{cognome},{email},{telefono}\n"
         f.write(riga)
-        
-    except ValueError as e:
-        print('Error: ' + e)
-    except Exception as e:
-        print('Error: ' + e)
-    finally:
         f.close()
-        print("Operazione di inserimento terminata!")
+    except ValueError as e:
+        print(e)
+    except Exception as e:
+        print(e)
+    finally:
+        print("Operazione di inserimento completata!")
     
 def visualizza_contatti():
-    if(not os.path.exists(rubrica)):
-        raise FileNotFoundError("Il file rubrica non esiste!!!")
-    
-    f = open(rubrica, 'r')
-    contatti = f.readlines()
-    
-    if(not contatti): 
-        print('Nessun contatto salvato nel file.')
-        return
-    
-    print('Elenco Contatti salvati')
-    for contatto in enumerate(contatti, 1):
-        print(contatto)
+    try:
+        if(not os.path.exists(rubrica)):
+            raise FileNotFoundError("Il file rubrica non esiste!!!")
         
+        f = open(rubrica, 'r', encoding="utf-8")
+        contatti = f.readlines()
+
+        if(not contatti): 
+            print('Nessun contatto salvato nel file.')
+            return
+        
+        print()
+        print('Elenco Contatti salvati')
+        for i, contatto in enumerate(contatti, 1):
+            nome, cognome, email, telefono = contatto.strip().split(',')
+            print(f"{i} - {nome} {cognome} Email: {email}, Telefono: {telefono}")
+        print('\n') 
+        f.close()
+    except FileNotFoundError as e:
+        print(e)
+    except Exception as e:
+        print(e)
+    finally:
+        print("Operazione completata")
+
+
 while True:
     scelta = menu()
     if(scelta == 1):
