@@ -339,3 +339,20 @@ SELECT * FROM organizzazione_scolastica.classi;
 SELECT * FROM organizzazione_scolastica.studenti;
 SELECT * FROM organizzazione_scolastica.docenti;
 SELECT * FROM organizzazione_scolastica.classi_docenti;
+
+
+-- Esercizi SQL
+-- 1 -> Seleziona il DB sakila 
+-- 2 -> Visualizza il nome e il cognome di tutti gli attori 
+-- 			dalla tabella actor.
+-- 3 -> Devi trovare il numero identificativo, il nome e il cognome 
+--  		di un attore, di cui conosci solo il nome, "Joe".
+-- 4 -> Trova tutti gli attori il cui cognome contiene le lettere 'GEN'.
+-- 5 -> Trova tutti gli attori i cui cognomi contengono le lettere 'LI'. 
+-- 			Questa volta, ordina le righe per cognome e nome, 
+-- 			in quest'ordine.
+-- 6 -> Utilizzando IN, visualizzare le colonne country_id e country 
+-- 			della tab country dei seguenti paesi: Afghanistan, Bangladesh e China
+-- 7 -> Aggiungi una middle_name colonna alla tabella actor. 
+-- 			Posizionalo tra first_name e last_name.
+-- 8 -> Ora elimina la middle_name colonna.

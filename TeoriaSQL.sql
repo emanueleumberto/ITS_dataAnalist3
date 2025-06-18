@@ -17,7 +17,7 @@
             per inserimento e gestione di dati in un DB
     DQL -> Data Query Language
 			Definisce tutte le istruzioni di tipo SQL
-            per le lettura di dati da un DB
+            per la lettura di dati da un DB
     DCL -> Data Control Language
 			Definisce tutte le istruzioni di tipo SQL
             per la gestione e i permessi di un DB
@@ -86,6 +86,51 @@ ROLLBACK;
 COMMIT;
 	-- Salvo le modifiche nel database
 */
+
+-- DQL -> Data Query Language 
+-- SELECT 	-> Un elenco di colonne o tutto (*) da esporre nel resultset di risultati
+-- FROM		-> Indica una sorgente di dati da cui leggere (la/le tabelle di un DB)
+-- WHERE	-> search_condition, applica un filtro sulle righe della tabella indicata nel FROM
+-- GROUP BY	-> Aggrega dati in base ad una colonna della tabella
+-- HAVING	-> search_condition, applica un filtro sulle righe della tabella filtrata e aggregata dal GROUP BY
+-- ORDER BY	-> consente di definire un ordinamento ben preciso in base ad una colonna della tabella
+-- LIMIT	-> consente di definire un numero definito di record
+--
+-- SELECT [DISTINCT] column_name1, column_name2, ... column_nameN | * | aggregate_function(expression)
+-- 	FROM table_name
+-- 	[WHERE search_condition]
+-- 	[GROUP BY]
+-- 	[HAVING search_condition]
+-- 	[ORDER BY]
+-- 	[LIMIT n]
+
+/* 
+	Operatori di confronto della search condition
+    = (Uguale)
+    > (maggiore di)
+    < (minore di)
+    >= (maggiore uguale)
+    <= (minore uguale)
+    <> | != (diverso da)
+    !< (non minore di)
+    !> (non maggiore di)
+
+	Operatori logici
+    AND (restituisce TRUE solo se entrambe le condizioni booleane restituiscono TRUE)
+    OR (restituisce TRUE se almeno una delle due condizioni booleane restituiscono TRUE)
+    
+    LIKE (contiene ... | caratteri jolly %_)
+    BETWEEN (restituisce tutti i valori compresi tra >= AND <=)
+    IN | NOT IN (Elenco di valori in cui individuare una corrispondenza)
+    
+    WHERE district = 'California'
+    WHERE district LIKE 'Ca%'
+    WHERE district LIKE 'C_l%'
+    WHERE district IN ('California', 'Texas')
+    
+    
+*/
+
 
 -- DDL -> DATABASE
 DROP DATABASE IF EXISTS test_db;
@@ -336,4 +381,29 @@ SELECT * FROM test_db.users;
 SELECT * FROM test_db.products;
 SELECT * FROM test_db.orders;
 SELECT * FROM test_db.order_details;
+
+-- DQL
+-- SELECT [DISTINCT] column_name1, column_name2, ... column_nameN | * | aggregate_function(expression)
+-- 	FROM table_name
+-- 	[WHERE search_condition]
+-- 	[GROUP BY]
+-- 	[HAVING search_condition]
+-- 	[ORDER BY]
+-- 	[LIMIT n]
+
+USE sakila;
+SELECT * FROM sakila.address;
+SELECT address, district FROM sakila.address;
+SELECT COUNT(*) FROM sakila.address;
+SELECT * FROM sakila.address WHERE district = 'California';
+SELECT COUNT(*) AS numRighe FROM sakila.address WHERE district = 'California';
+SELECT DISTINCT district FROM sakila.address;
+
+SELECT district, COUNT(*) AS numCity 	-- 7
+	FROM sakila.address					-- 1
+    WHERE city_id > 300					-- 2
+    GROUP BY district					-- 3
+    HAVING numCity >= 2					-- 4
+    ORDER BY numCity DESC				-- 5
+    LIMIT 5 OFFSET 0;					-- 6
 
