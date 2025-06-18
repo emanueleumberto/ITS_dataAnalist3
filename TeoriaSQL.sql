@@ -14,7 +14,7 @@
             per la creazione e gestione del DB
     DML -> Data Manipulation Language
 			Definisce tutte le istruzioni di tipo SQL
-            per la creazione e gestione di tabelle di un DB
+            per inserimento e gestione di dati in un DB
     DQL -> Data Query Language
 			Definisce tutte le istruzioni di tipo SQL
             per le lettura di dati da un DB
@@ -63,6 +63,28 @@
     Relazione -> OneToOne
     Relazione -> OneToMany
     Relazione -> ManyToMany
+    
+-- DML -> Data Manipulation Language 
+-- INSERT | UPDATE | DELETE
+
+-- INSERT INTO db_name.table_name (column_name1, column_name2, ..., column_nameN)
+--		VALUES (value1, value2, ..., valueN);
+
+-- UPDATE db_name.table_name SET column_name1 = value1, 
+			column_name2 = value2, ..., column_nameN = valueN
+         WHERE column_name = value
+         
+-- DELETE FROM db_name.table_name WHERE column_name = value;
+
+-- Comportamento predefinito di MySql -> Ogni istruzione di tipo DML viene automaticamente
+-- scritta nel database subito dopo l'esecuzione
+SET autocommit = 0; -- Disabilito l'auto commit di default
+START TRANSACTION; -- BEGIN(Istruzione equivalente)
+	-- Effettuo tutte le istruzioni di tipo DML (INSERT | UPDATE | DELETE)
+ROLLBACK;
+	-- Torno in uno stato precedente
+COMMIT;
+	-- Salvo le modifiche nel database
 */
 
 -- DDL -> DATABASE
@@ -166,10 +188,152 @@ ALTER TABLE test_db.users_courses
 ALTER TABLE test_db.users_courses
 		ADD CONSTRAINT users_courses_fk2 FOREIGN KEY(course_id)
         REFERENCES test_db.courses(course_id)
-        ON DELETE CASCADE ON UPDATE CASCADE
+        ON DELETE CASCADE ON UPDATE CASCADE;
 
+-- DML
+-- users -> user_id - firstname - lastname - age - city - fiscal_code
+INSERT INTO test_db.users(firstname, lastname, age, city, fiscal_code)
+			VALUES ('Mario', 'Rossi', 23, 'Roma', 'ABC123DEF456GHI7');
+INSERT INTO test_db.users(firstname, lastname, fiscal_code)
+			VALUES ('Giuseppe', 'Verdi', 'ABC123DEF456GHI8');
+INSERT INTO test_db.users(firstname, lastname, age, city, fiscal_code)
+			VALUES ('Francesca', 'Neri', 28, 'Milano', 'ABC123DEF456GHI9');
 
+UPDATE test_db.users SET city = 'Palermo', age = 19 WHERE user_id = 3;
 
+DELETE FROM test_db.users WHERE user_id = 3;
 
+SELECT * FROM test_db.users;
 
+-- signin -> signin_id - email - password - user_id
+INSERT INTO test_db.signin (email, password, user_id)
+		VALUES  ('m.rossi@example.com', 'Pa$$w0rd!', 1),
+				('f.neri@example.com', 'Pa$$w0rd!', 5);
+ 
+ INSERT INTO test_db.signin (email, password, user_id)
+		VALUES  ('g.verdi@example.com', 'Pa$$w0rd!', 6);
+
+INSERT INTO test_db.signin (email, password, user_id)
+		VALUES  ('test@example.com', 'test', 5);
+        
+DELETE FROM test_db.users WHERE user_id = 5;
+        
+SELECT * FROM test_db.signin;
+        
+-- cars -> car_id - car_name - car_license_plate - user_id
+INSERT INTO test_db.cars (car_name, car_license_plate, user_id)
+		VALUES  ('Fiat Panda', 'AB123CD', 1),
+				('Ford Fiesta', 'CD456FE', 6),
+                ('Renault Clio', 'EF789GH', 1);
+
+DELETE FROM test_db.users WHERE user_id = 1;
+
+SELECT * FROM test_db.cars;
+
+-- courses -> course_id - course_name - course_code - course_hours
+INSERT INTO test_db.courses (course_name, course_code, course_hours)
+		VALUES  ('SQL', 1, 40),
+				('Python', 2, 60),
+                ('Java', 3, 100);
+
+SELECT * FROM test_db.courses;
+
+-- users_courses -> users_courses_id - user_id - course_id - registration_date
+INSERT INTO test_db.users_courses (user_id, course_id)
+		VALUES  (6, 1),
+				(6, 2);
+                
+DELETE FROM test_db.users WHERE user_id = 6;
+
+SELECT * FROM test_db.users_courses;
+
+-- TRANSACTION COMMIT
+-- products (product_id, title, category, price)
+-- orders (order_id, user_id, order_date, total)
+-- order_details (detail_id, order_id, product_id, qt, price)
+CREATE TABLE IF NOT EXISTS test_db.products (
+	product_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(250) NOT NULL,
+    category VARCHAR(100) NOT NULL,
+    price DECIMAL(10,2) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS test_db.orders (
+	order_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    total DECIMAL(10,2) NOT NULL,
+    CONSTRAINT user_order_fk FOREIGN KEY(user_id) REFERENCES users(user_id)
+);
+
+CREATE TABLE IF NOT EXISTS test_db.order_details (
+	detail_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    product_id INT NOT NULL,
+    qt INT UNSIGNED DEFAULT 1,
+    price DECIMAL(10,2) NOT NULL,
+    CONSTRAINT order_detail_fk FOREIGN KEY(order_id) 
+		REFERENCES orders(order_id) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT order_detail_product_fk FOREIGN KEY(product_id) 
+		REFERENCES products(product_id) 
+);
+
+INSERT INTO test_db.products (title, category, price)
+	VALUES  ('Smartphone X200', 'Elettronica', 399.99),
+			('Tastiera Meccanica RGB', 'Informatica', 89.90),
+			('Borraccia Termica 750ml', 'Casa e Cucina', 17.50),
+			('Zaino Antifurto UrbanTech', 'Accessori', 45.00),
+			('Cuffie Bluetooth Noise Cancel', 'Audio', 79.99),
+			('Maglietta Cotone Bio L', 'Abbigliamento', 14.90),
+			('Mouse Wireless Ergonomico', 'Informatica', 29.99),
+			('Set Penne Colorate 12pz', 'Cartoleria', 6.49),
+			('Power Bank 20000mAh', 'Accessori', 32.99),
+			('Lampada da Tavolo LED Touch', 'Illuminazione', 25.00);
+
+/*INSERT INTO test_db.orders (user_id, total) VALUES (8, 70.00);
+INSERT INTO test_db.order_details(order_id, product_id, price) 
+	VALUES  (1, 4, 45.00),
+			(1, 10, 25.00);
+*/
+
+-- Esempio 1 senza condizioni
+SET autocommit = 0; -- Disabilito l'auto commit di default
+START TRANSACTION; 
+-- Effettuo tutte le istruzioni di tipo DML (INSERT | UPDATE | DELETE)
+-- Inserisco un ordine nella tabella orders
+INSERT INTO test_db.orders (user_id, total) VALUES (8, 70.00);
+-- Ottendo l'id generato per l'oridine appena inserito
+SET @order_id = LAST_INSERT_ID();
+-- Inserisco i dettagli dell'ordine appena inserito
+INSERT INTO test_db.order_details(order_id, product_id, price) 
+VALUES  (@order_id, 4, 45.00),
+		(@order_id, 10, 25.00);	
+-- ROLLBACK; -- Torno in uno stato precedente
+COMMIT; -- Salvo le modifiche nel database
+
+-- Esempio 2 con istruzioni condizionali da utilizzare solo in una function o una store procedure
+/*SET autocommit = 0; -- Disabilito l'auto commit di default
+START TRANSACTION; 
+-- Effettuo tutte le istruzioni di tipo DML (INSERT | UPDATE | DELETE)
+BEGIN -- Blocco di istruzioni principale
+	-- Inserisco un ordine nella tabella orders
+	INSERT INTO test_db.orders (user_id, total) VALUES (8, 70.00);
+    -- Ottendo l'id generato per l'oridine appena inserito
+	SET @order_id = LAST_INSERT_ID();
+	-- Inserisco i dettagli dell'ordine appena inserito
+	INSERT INTO test_db.order_details(order_id, product_id, price) 
+	VALUES  (@order_id, 4, 45.00),
+			(@order_id, 10, 25.00);
+	-- Verifica di una condizione
+    IF(70.00 > 0) THEN
+		COMMIT; -- Salvo le modifiche nel database
+	ELSE 
+		ROLLBACK; -- Torno in uno stato precedente
+	END IF;
+END;*/
+
+SELECT * FROM test_db.users;
+SELECT * FROM test_db.products;
+SELECT * FROM test_db.orders;
+SELECT * FROM test_db.order_details;
 
