@@ -343,16 +343,43 @@ SELECT * FROM organizzazione_scolastica.classi_docenti;
 
 -- Esercizi SQL
 -- 1 -> Seleziona il DB sakila 
+USE sakila;
 -- 2 -> Visualizza il nome e il cognome di tutti gli attori 
 -- 			dalla tabella actor.
+SELECT first_name, last_name FROM sakila.actor;
 -- 3 -> Devi trovare il numero identificativo, il nome e il cognome 
 --  		di un attore, di cui conosci solo il nome, "Joe".
+SELECT actor_id, first_name, last_name 
+	FROM sakila.actor WHERE first_name = "Joe";
 -- 4 -> Trova tutti gli attori il cui cognome contiene le lettere 'GEN'.
+SELECT * FROM sakila.actor WHERE last_name LIKE '%GEN%';
 -- 5 -> Trova tutti gli attori i cui cognomi contengono le lettere 'LI'. 
 -- 			Questa volta, ordina le righe per cognome e nome, 
 -- 			in quest'ordine.
+SELECT * FROM sakila.actor WHERE last_name LIKE '%LI%' 
+	ORDER BY last_name, first_name;
 -- 6 -> Utilizzando IN, visualizzare le colonne country_id e country 
 -- 			della tab country dei seguenti paesi: Afghanistan, Bangladesh e China
+SELECT country_id, country FROM sakila.country
+	WHERE country IN ('Afghanistan', 'Bangladesh' , 'China');
 -- 7 -> Aggiungi una middle_name colonna alla tabella actor. 
 -- 			Posizionalo tra first_name e last_name.
+ALTER TABLE sakila.actor 
+	ADD COLUMN middle_name VARCHAR(100) NULL AFTER first_name;
+SELECT * FROM sakila.actor;
 -- 8 -> Ora elimina la middle_name colonna.
+ALTER TABLE sakila.actor DROP COLUMN middle_name;
+
+-- 9 -> Elenca i cognomi degli attori e il numero degli attori che hanno quel cognome.
+-- 		Assegna un nome alla colonna 'Actor LastName' e 'LastName Count'
+-- 10 -> Visualizza il nome e il cognome di ciascun attore in un'unica colonna in lettere minuscole. 
+-- 		Assegna un nome alla colonna 'Actor Name'.
+-- 11 -> Elenca i cognomi degli attori e il numero di attori che hanno quel cognome, 
+-- 		ma solo per i nomi condivisi da almeno due attori
+-- 12 -> Visualizzare 'Nome Cognome' di ciascun membro dello staff (Staff Member)
+-- 13 -> Calcola il totale speso da ciascun cliente nella tabella payment
+-- 14 -> Mostra gli importi dei pagamenti arrotondati al numero intero più vicino 
+-- 		nella tabella payment
+-- 15 -> Mostra la durata media dei film per categoria con 
+-- 		durata compresa tra 90 e 120 minuti
+-- 16 -> Mostra il pagamento massimo effettuato da ciascun cliente

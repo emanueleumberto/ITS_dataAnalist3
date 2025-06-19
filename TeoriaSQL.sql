@@ -127,10 +127,38 @@ COMMIT;
     WHERE district LIKE 'Ca%'
     WHERE district LIKE 'C_l%'
     WHERE district IN ('California', 'Texas')
-    
-    
+        
 */
 
+/*
+	Functions
+    String Functions
+    https://dev.mysql.com/doc/refman/8.4/en/string-functions.html
+    CONCAT(column_1, ' - ', column_2 ) -> Funzione che ci permette di concatenare dati contenuti in due o più colonne
+    UPPER('string' | column_name) -> Funzione che ci restituisce una stringa o il valore del campo in maiuscolo
+    LOWER('string' | column_name) -> Funzione che ci restituisce una stringa o il valore del campo in minuscolo
+    LENGTH('string' | column_name) -> Funzione che ci restituisce la lunghezza di una stringa o del valore di un campo
+    TRIM('string' | column_name) -> Funzione che restituisce una stringa senza spazi vuoti prima o dopo il valore inserito
+    
+    Numeric Functions
+    https://dev.mysql.com/doc/refman/8.4/en/numeric-functions.html
+    COUNT(* | DISTINCT column_name ) -> Funzione che restituisce il numero di record restituiti da una query
+    FORMAT(number | column_name, 2) -> Funzione che restituisce un numero decimale formattato
+    TRUNCATE(number | column_name, 2) -> Funzione che restituisce un numero decimale troncato
+    ABS(number | column_name) -> Funzione che restituisce un valore assoluto, senza segno
+    AVG(column_name) -> Funzione che restituisce la media di valori di una colonna 
+    CEIL(column_name) -> Funzione che restituisce un valore arrotondato per eccesso
+    FLOOR(column_name) -> Funzione che restituisce un valore arrotondato per difetto
+    ROUND(column_name) -> Funzione che restituisce un valore arrotondato la numero intero più vicino
+    RAND() -> Funzione che restituisce un numero casuale compreso tra 0 e 1
+    MAX(column_name) -> Funzione che restituisce il valore massimo contenuto in una colonna 
+    MIN(column_name) -> Funzione che restituisce il valore minimo contenuto in una colonna 
+    SUM(column_name) -> Funzione che restituisce la somma dei valori contenuti in una colonna 
+    
+    Date Functions
+    
+    Advanced Functions
+*/
 
 -- DDL -> DATABASE
 DROP DATABASE IF EXISTS test_db;
@@ -399,6 +427,31 @@ SELECT * FROM sakila.address WHERE district = 'California';
 SELECT COUNT(*) AS numRighe FROM sakila.address WHERE district = 'California';
 SELECT DISTINCT district FROM sakila.address;
 
+SELECT * FROM sakila.film;
+SELECT COUNT(*) FROM sakila.film;
+SELECT * FROM sakila.film WHERE release_year = 2006 AND rental_duration > 6;
+SELECT * FROM sakila.film WHERE release_year = 2005 OR rental_duration > 6;
+SELECT * FROM sakila.film WHERE release_year = 2005 AND (rental_duration < 6 OR rental_rate = 2.99);
+
+SELECT * FROM sakila.film WHERE title = 'AFRICAN EGG';
+SELECT * FROM sakila.film WHERE title LIKE '%APA%';
+SELECT * FROM sakila.film WHERE title LIKE '%APE';
+SELECT * FROM sakila.film WHERE title LIKE 'AP%';
+SELECT * FROM sakila.film WHERE title LIKE 'AP_C%';
+
+SELECT * FROM sakila.film WHERE length BETWEEN 50 AND 60;
+SELECT * FROM sakila.film WHERE length >= 50 AND length <= 60;
+SELECT * FROM sakila.film WHERE title BETWEEN 'AC%' AND 'AM%';
+
+SELECT * FROM sakila.film WHERE rating IN ('NC-17', 'R', 'PG-13');
+SELECT * FROM sakila.film WHERE rating NOT IN ('NC-17', 'R', 'PG-13');
+
+SELECT CONCAT(title, ' (', release_year, ')') FROM sakila.film WHERE title LIKE '%APE';
+SELECT LOWER(title) FROM sakila.film WHERE title LIKE '%APE';
+SELECT UPPER(title) FROM sakila.film WHERE title LIKE '%APE';
+SELECT LENGTH(title) FROM sakila.film WHERE title LIKE '%APE';
+SELECT * FROM sakila.film WHERE LENGTH(title)  > 20;
+
 SELECT district, COUNT(*) AS numCity 	-- 7
 	FROM sakila.address					-- 1
     WHERE city_id > 300					-- 2
@@ -406,4 +459,5 @@ SELECT district, COUNT(*) AS numCity 	-- 7
     HAVING numCity >= 2					-- 4
     ORDER BY numCity DESC				-- 5
     LIMIT 5 OFFSET 0;					-- 6
+
 
