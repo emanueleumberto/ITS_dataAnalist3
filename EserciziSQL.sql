@@ -372,8 +372,8 @@ ALTER TABLE sakila.actor DROP COLUMN middle_name;
 
 -- 9 -> Elenca i cognomi degli attori e il numero degli attori che hanno quel cognome.
 -- 		Assegna un nome alla colonna 'Actor LastName' e 'LastName Count'
--- 10 -> Visualizza il nome e il cognome di ciascun attore in un'unica colonna in lettere minuscole. 
--- 		Assegna un nome alla colonna 'Actor Name'.
+-- 10 -> Visualizza il nome e il cognome di ciascun attore in un'unica colonna 
+-- 		in lettere minuscole. Assegna un nome alla colonna 'Actor Name'.
 -- 11 -> Elenca i cognomi degli attori e il numero di attori che hanno quel cognome, 
 -- 		ma solo per i nomi condivisi da almeno due attori
 -- 12 -> Visualizzare 'Nome Cognome' di ciascun membro dello staff (Staff Member)
