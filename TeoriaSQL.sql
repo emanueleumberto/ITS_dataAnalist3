@@ -156,8 +156,24 @@ COMMIT;
     SUM(column_name) -> Funzione che restituisce la somma dei valori contenuti in una colonna 
     
     Date Functions
+    https://dev.mysql.com/doc/refman/8.4/en/date-and-time-functions.html
+    ADDDATE(date, n) -> Funzione che aggiunge n ad una data
+    ADDTIME(time, n) -> Funzione che aggiunge n ad un orario
+    CURRENT_DATE() -> Funzione che restituisce una data nel formato 'YYYY-MM-GG'(String)
+	CURRENT_TIME() -> Funzione che restituisce un orario nel formato 'HH-MM-SS'(String)
+    CURRENT_TIMESTAMP() -> Funzione che restituisce data e orario del momento
+    DATEDIFF(date1, date2) -> Funzione che calcola la differenza di giorni tra due date
+    DAY(date) -> Funzione che restituisce il giorno da una data
+    MONTH(date) -> Funzione che restituisce il mese da una data
+    YEAR(date) -> Funzione che restituisce l'anno da una data
+    HOUR(datetime) -> Funzione che restituisce l'ora da un valore orario
+    MINUTE(datetime) -> Funzione che restituisce i minuti da un valore orario
+    SECOND(datetime) -> Funzione che restituisce i secondi da un valore orario
     
     Advanced Functions
+    ISNULL(column_name) -> Funzione che restituisce un valore 1 o 0 in base al valore null di una colonna
+	LAST_INSERT_ID() -> Funzione che restituisce l'ultimo valore del campo id(Primary Key) inserito in una tabella 
+    
 */
 
 -- DDL -> DATABASE

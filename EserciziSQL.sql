@@ -372,14 +372,45 @@ ALTER TABLE sakila.actor DROP COLUMN middle_name;
 
 -- 9 -> Elenca i cognomi degli attori e il numero degli attori che hanno quel cognome.
 -- 		Assegna un nome alla colonna 'Actor LastName' e 'LastName Count'
+SELECT last_name AS 'Actor LastName', COUNT(last_name) AS 'LastName Count' 
+	FROM sakila.actor GROUP BY last_name;
 -- 10 -> Visualizza il nome e il cognome di ciascun attore in un'unica colonna 
 -- 		in lettere minuscole. Assegna un nome alla colonna 'Actor Name'.
+SELECT LOWER(CONCAT(first_name, ' ', last_name)) AS 'Actor Name' 
+	FROM sakila.actor;
 -- 11 -> Elenca i cognomi degli attori e il numero di attori che hanno quel cognome, 
 -- 		ma solo per i nomi condivisi da almeno due attori
+SELECT last_name AS 'Actor LastName', COUNT(last_name) AS 'LastName Count' 
+	FROM sakila.actor GROUP BY last_name HAVING COUNT(last_name) >= 2;
 -- 12 -> Visualizzare 'Nome Cognome' di ciascun membro dello staff (Staff Member)
+SELECT CONCAT(first_name, ' ', last_name) AS 'Staff Member' FROM sakila.staff;
 -- 13 -> Calcola il totale speso da ciascun cliente nella tabella payment
+SELECT customer_id, SUM(amount) AS total_amount 
+	FROM sakila.payment GROUP BY customer_id;
 -- 14 -> Mostra gli importi dei pagamenti arrotondati al numero intero più vicino 
 -- 		nella tabella payment
--- 15 -> Mostra la durata media dei film per categoria con 
--- 		durata compresa tra 90 e 120 minuti
--- 16 -> Mostra il pagamento massimo effettuato da ciascun cliente
+SELECT amount, ROUND(amount) AS round FROM sakila.payment;
+-- 15 -> Mostra il titolo e la durata (90 min) dei film con 
+-- 		durata compresa tra 90 e 120 minuti ed ordina per durata
+SELECT title, CONCAT(length, ' min') FROM sakila.film 
+	WHERE length BETWEEN 90 AND 120 ORDER BY length DESC;
+-- 16 -> Mostra della tabella paymnet il numero di pagamenti effettuati,
+-- 		la media dei pagamenti effettuati, il pagamento minimo effettuato e 
+-- 		il pagamento massimo effettuato da ciascun cliente
+SELECT customer_id, COUNT(amount) AS number_amount, 
+	FORMAT(AVG(amount), 2) AS avg_amount, MAX(amount) AS max_amount, 
+    MIN(amount) AS min_amount
+	FROM sakila.payment GROUP BY customer_id;
+-- 17 -> Trova la data del primo noleggio registrato (rental)
+-- 18 -> Conta il numero di noleggi per ogni anno (rental)
+-- 19 -> Calcola la durata media di un noleggio in giorni (rental)
+-- 20 -> Elenca tutti i noleggi con durata superiore a 3 giorni (rental)
+-- 21 -> Mostra l’ultima data di noleggio effettuata (rental)
+-- 22 -> Elenca i noleggi effettuati nel mese di dicembre 2005 (rental)
+-- 23 -> Mostra il giorno della settimana per ciascun noleggio (rental)
+-- 24 -> Conta i noleggi effettuati di domenica (DAYOFWEEK) -> 1 = Domenica
+-- 25 -> Visualizza i noleggi effettuati tra il 1° e il 15 gennaio 2006
+-- 26 -> Mostra i primi 10 noleggi effettuati con la data formattata 'GG/MM/AAAA' (DATE_FORMAT)
+
+
+
