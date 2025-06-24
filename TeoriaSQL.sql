@@ -6,6 +6,7 @@
 
 -- https://dbml.dbdiagram.io/docs/
 -- https://dbdiagram.io/home
+-- https://www.w3schools.com/
 
 -- SQL ha diverse categorie di Statement
 /*
@@ -173,7 +174,20 @@ COMMIT;
     Advanced Functions
     ISNULL(column_name) -> Funzione che restituisce un valore 1 o 0 in base al valore null di una colonna
 	LAST_INSERT_ID() -> Funzione che restituisce l'ultimo valore del campo id(Primary Key) inserito in una tabella 
-    
+   
+	Join tra tabelle
+		SELECT [DISTINCT] column_name1, column_name2, ... column_nameN | * | aggregate_function(expression)
+		FROM table_name1
+        INNER | LEFT | RIGHT JOIN table_name2 ON condition
+        INNER | LEFT | RIGHT JOIN table_name3 ON condition
+        ...
+        INNER | LEFT | RIGHT JOIN table_nameN ON condition
+		[WHERE search_condition]
+		[GROUP BY]
+		[HAVING search_condition]
+		[ORDER BY]
+		[LIMIT n]
+   
 */
 
 -- DDL -> DATABASE
@@ -476,4 +490,14 @@ SELECT district, COUNT(*) AS numCity 	-- 7
     ORDER BY numCity DESC				-- 5
     LIMIT 5 OFFSET 0;					-- 6
 
+-- JOIN example
+SELECT * FROM sakila.rental;
+SELECT * FROM sakila.customer;
+SELECT * FROM sakila.staff;
 
+SELECT rental_id, rental_date, return_date, c.first_name, 
+		c.last_name, c.email, s.first_name AS staff_firstname, 
+        s.last_name AS staff_lastname, s.email AS staff_email
+	FROM sakila.rental AS r
+    INNER JOIN sakila.customer AS c ON r.customer_id = c.customer_id
+    INNER JOIN sakila.staff AS s ON r.staff_id = s.staff_id;

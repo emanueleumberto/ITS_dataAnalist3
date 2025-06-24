@@ -402,15 +402,45 @@ SELECT customer_id, COUNT(amount) AS number_amount,
     MIN(amount) AS min_amount
 	FROM sakila.payment GROUP BY customer_id;
 -- 17 -> Trova la data del primo noleggio registrato (rental)
+	SELECT MIN(rental_date) AS primo_noleggio FROM sakila.rental;
 -- 18 -> Conta il numero di noleggi per ogni anno (rental)
+	SELECT YEAR(rental_date) AS anno, COUNT(*) AS numero_noleggi 
+		FROM sakila.rental GROUP BY anno ;
 -- 19 -> Calcola la durata media di un noleggio in giorni (rental)
+	SELECT FORMAT(AVG(DATEDIFF(return_date, rental_date)), 2) AS durata_media_noleggio
+		FROM sakila.rental;
 -- 20 -> Elenca tutti i noleggi con durata superiore a 3 giorni (rental)
+	SELECT rental_id, rental_date, return_date, 
+			customer_id, staff_id, DATEDIFF(return_date, rental_date) AS durata_noleggio
+		FROM sakila.rental WHERE DATEDIFF(return_date, rental_date) > 3;
 -- 21 -> Mostra l’ultima data di noleggio effettuata (rental)
+	SELECT MAX(rental_date) AS ultimo_noleggio FROM sakila.rental;
 -- 22 -> Elenca i noleggi effettuati nel mese di dicembre 2005 (rental)
--- 23 -> Mostra il giorno della settimana per ciascun noleggio (rental)
+	SELECT rental_id, rental_date, return_date, customer_id, staff_id
+		FROM sakila.rental WHERE MONTH(rental_date) = 12 AND YEAR(rental_date) = 2005;
+-- 23 -> Mostra il giorno della settimana per ciascun noleggio (rental) -> DAYNAME
+	SELECT rental_id, rental_date, return_date, customer_id, 
+		staff_id, DAYNAME(rental_date)
+		FROM sakila.rental;
 -- 24 -> Conta i noleggi effettuati di domenica (DAYOFWEEK) -> 1 = Domenica
+	SELECT COUNT(*) AS noleggi_domenica 
+		FROM sakila.rental WHERE DAYOFWEEK(rental_date) = 1;
 -- 25 -> Visualizza i noleggi effettuati tra il 1° e il 15 gennaio 2006
+	SELECT * FROM sakila.rental 
+		WHERE rental_date BETWEEN '2006-01-01' AND '2006-01-15';
 -- 26 -> Mostra i primi 10 noleggi effettuati con la data formattata 'GG/MM/AAAA' (DATE_FORMAT)
+	SELECT rental_id, DATE_FORMAT(rental_date, '%d/%m/%Y') AS data_formattata 
+		FROM sakila.rental LIMIT 10;
+-- 27 -> Utilizzare JOIN per visualizzare il nome e il cognome, 
+-- 		 nonché l'indirizzo, di ciascun membro dello staff. 
+-- 		 Utilizza le tabelle staff e address
+-- 28 -> Da utilizzare JOIN per visualizzare 'Nome Cognome' di 
+-- 		 ciascun membro dello staff (Staff Member) l'importo totale di
+--  	 ciascun membro (Total Amount) del personale nell'agosto del 2005. 
+-- 		 Utilizzare le tabelle staff e payment.
+-- 29 -> Elenca ogni film e il numero di attori elencati per quel film. 
+-- 		 Utilizzare tabelle film_actor e film. Utilizza INNER JOIN.
+
 
 
 
