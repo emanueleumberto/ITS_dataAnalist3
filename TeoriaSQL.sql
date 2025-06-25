@@ -188,6 +188,52 @@ COMMIT;
 		[ORDER BY]
 		[LIMIT n]
    
+   SubQuery o InnerQuery -> Sono query inserite in altre query, 
+   una query annidata dipende da una query esterna
+   posso inserire query annidate in: SELECT, FROM, WHERE
+   
+   SELECT [DISTINCT] column_name1, column_name2, ..., column_nameN | * | aggregate_function(expression) 
+   FROM (
+		SELECT [DISTINCT] column_name ...
+        FROM table_name
+        [WHERE search_condition]
+        ...
+   )
+   [WHERE search_condition]
+   [GROUP BY]
+   [HAVING search_condition]
+   [ORDER BY]
+   [LIMIT n]
+   
+   _______________________________________________________
+   
+   SELECT (
+		SELECT [DISTINCT] column_name ...
+        FROM table_name
+        [WHERE search_condition]
+        ...
+   ) 
+   FROM table_name
+   [WHERE search_condition]
+   [GROUP BY]
+   [HAVING search_condition]
+   [ORDER BY]
+   [LIMIT n]
+   
+   _______________________________________________________
+   
+   SELECT [DISTINCT] column_name1, column_name2, ..., column_nameN | * | aggregate_function(expression) 
+   FROM table_name
+   [WHERE (
+		SELECT [DISTINCT] column_name ...
+        FROM table_name
+        [WHERE search_condition]
+        ...
+   ) ]
+   [GROUP BY]
+   [HAVING search_condition]
+   [ORDER BY]
+   [LIMIT n]
 */
 
 -- DDL -> DATABASE
@@ -501,3 +547,30 @@ SELECT rental_id, rental_date, return_date, c.first_name,
 	FROM sakila.rental AS r
     INNER JOIN sakila.customer AS c ON r.customer_id = c.customer_id
     INNER JOIN sakila.staff AS s ON r.staff_id = s.staff_id;
+
+-- INNER QUERY example
+SELECT * FROM sakila.customer;
+SELECT * FROM sakila.rental;
+
+-- Visualizzare il numero di noleggi effettuato da ogni cliente
+SELECT c.customer_id, c.first_name, c.last_name, (
+		SELECT COUNT(*) FROM sakila.rental AS r 
+			WHERE r.customer_id = c.customer_id
+	) AS total_rental
+	FROM sakila.customer AS c;
+
+-- Visualizzare i clienti che hanno effettuato 
+-- almento un noleggio nel periodo di agosto 2005
+SELECT c.first_name, c.last_name FROM sakila.customer AS c
+	WHERE c.customer_id  IN (
+		SELECT r.customer_id FROM sakila.rental AS r 
+			WHERE YEAR(r.rental_date) = 2005 AND MONTH(r.rental_date) = 8 
+    );
+
+-- Calcolare il numero di noleggi effettuati per mese nel 2005
+SELECT mese, COUNT(*) AS totale_noleggi FROM (
+	SELECT rental_id, MONTHNAME(rental_date) AS mese FROM sakila.rental 
+		WHERE YEAR(rental_date) = 2005
+) AS sub
+GROUP BY mese
+

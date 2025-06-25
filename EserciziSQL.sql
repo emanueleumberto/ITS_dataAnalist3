@@ -434,13 +434,41 @@ SELECT customer_id, COUNT(amount) AS number_amount,
 -- 27 -> Utilizzare JOIN per visualizzare il nome e il cognome, 
 -- 		 nonché l'indirizzo, di ciascun membro dello staff. 
 -- 		 Utilizza le tabelle staff e address
+	SELECT * FROM sakila.staff;
+    SELECT * FROM sakila.address;
+    SELECT s.first_name, s.last_name, a.address FROM sakila.staff AS s 
+		LEFT JOIN sakila.address AS a ON s.address_id = a.address_id; 
 -- 28 -> Da utilizzare JOIN per visualizzare 'Nome Cognome' di 
 -- 		 ciascun membro dello staff (Staff Member) l'importo totale di
 --  	 ciascun membro (Total Amount) del personale nell'agosto del 2005. 
 -- 		 Utilizzare le tabelle staff e payment.
+	SELECT * FROM sakila.staff;
+    SELECT * FROM sakila.payment;
+    SELECT CONCAT(s.first_name, ' ', s.last_name) AS 'Staff Member', 
+    FORMAT(SUM(p.amount), 2) AS 'Total Amount'
+		FROM sakila.staff AS s 
+		LEFT JOIN sakila.payment AS p ON s.staff_id = p.staff_id
+        -- WHERE p.payment_date BETWEEN '2005-08-01' AND '2005-08-31'
+        -- WHERE YEAR(p.payment_date) = 2005 AND MONTH(p.payment_date) = 8
+        -- WHERE p.payment_date LIKE '2005-08%'
+        WHERE p.payment_date >= '2005-08-01' AND p.payment_date <= '2005-08-31'
+        GROUP BY s.staff_id;
 -- 29 -> Elenca ogni film e il numero di attori elencati per quel film. 
+-- 		 stampa solo i film che hanno almeno 5 attori
 -- 		 Utilizzare tabelle film_actor e film. Utilizza INNER JOIN.
-
-
-
-
+	SELECT * FROM sakila.film;
+    SELECT * FROM sakila.film_actor;
+    SELECT f.title, COUNT(fa.actor_id) AS 'Numero Attori' FROM sakila.film AS f 
+		LEFT JOIN sakila.film_actor AS fa ON f.film_id = fa.film_id
+        GROUP BY f.title
+        HAVING COUNT(fa.actor_id) >= 5;
+-- 30 -> Utilizza le subquery per visualizzare i titoli dei film che iniziano con 
+-- 		le lettere K e Q e la cui lingua è l'inglese.
+-- 31 -> Utilizza le subquery per visualizzare tutti gli attori che appaiono 
+-- 		nel film 'Alone Trip'
+-- 32 -> Utilizzando le subquery trova qual è il film con la durata maggiore, 
+-- 		indicandone titolo e durata. Se fossero più di uno elencali in ordine di titolo.
+-- 33 -> Trova quali sono i film la cui durata è maggiore di almeno 60 minuti 
+-- 		della durata media di tutti i film.
+-- 34 -> Trova qual è il film con il maggior numero di attori, indicandone titolo 
+-- 		e numero di attori. Se fossero più di uno elencali in ordine di titolo.
