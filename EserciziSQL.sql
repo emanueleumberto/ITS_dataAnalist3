@@ -464,11 +464,114 @@ SELECT customer_id, COUNT(amount) AS number_amount,
         HAVING COUNT(fa.actor_id) >= 5;
 -- 30 -> Utilizza le subquery per visualizzare i titoli dei film che iniziano con 
 -- 		le lettere K e Q e la cui lingua è l'inglese.
--- 31 -> Utilizza le subquery per visualizzare tutti gli attori che appaiono 
--- 		nel film 'Alone Trip'
+
+-- Soluzione con SubQuery
+SELECT f.title FROM sakila.film AS f 
+	WHERE (f.title LIKE 'K%' OR f.title LIKE 'Q%') AND f.language_id = (
+		SELECT l.language_id FROM sakila.language AS l WHERE l.name = 'English'
+    );
+-- Soluzione con JOIN
+SELECT f.title FROM sakila.film AS f 
+	INNER JOIN sakila.language AS l ON f.language_id = l.language_id
+    WHERE (f.title LIKE 'K%' OR f.title LIKE 'Q%') AND l.name = 'English';
+
+-- 31 -> Utilizza le subquery per visualizzare Nome e Cognome di tutti  
+-- 		gli attori che appaiono nel film 'Alone Trip'
+
+-- Soluzione con SubQuery
+SELECT CONCAT(a.first_name, ' ' ,a.last_name) AS Actor_name
+	FROM sakila.actor AS a 
+	WHERE a.actor_id IN (
+		SELECT fa.actor_id FROM sakila.film_actor AS fa 
+			WHERE fa.film_id = (
+				SELECT f.film_id AS film_title FROM sakila.film AS f WHERE f.title = 'Alone Trip'
+			)
+);
+
+-- Soluzione con JOIN
+SELECT CONCAT(a.first_name, ' ' , a.last_name) AS Actor_name FROM sakila.film AS f 
+	INNER JOIN sakila.film_actor AS fa ON f.film_id = fa.film_id
+    INNER JOIN sakila.actor AS a ON fa.actor_id = a.actor_id
+    WHERE f.title = 'Alone Trip';
+
 -- 32 -> Utilizzando le subquery trova qual è il film con la durata maggiore, 
 -- 		indicandone titolo e durata. Se fossero più di uno elencali in ordine di titolo.
+
+-- Soluzione con SubQuery
+SELECT f.title, f.length FROM sakila.film AS f 
+	WHERE f.length = (
+		SELECT MAX(f.length) FROM sakila.film AS f
+    )
+    ORDER BY f.title;
+
 -- 33 -> Trova quali sono i film la cui durata è maggiore di almeno 60 minuti 
 -- 		della durata media di tutti i film.
+
+-- Soluzione con SubQuery
+SELECT f.title, f.length FROM sakila.film AS f 
+	WHERE f.length > (
+		SELECT AVG(f.length) FROM sakila.film AS f) + 60
+	ORDER BY f.length;
+
 -- 34 -> Trova qual è il film con il maggior numero di attori, indicandone titolo 
 -- 		e numero di attori. Se fossero più di uno elencali in ordine di titolo.
+
+SELECT * FROM sakila.film;
+SELECT * FROM sakila.actor;
+SELECT * FROM sakila.film_actor;
+
+-- 1 -> raggruppo il numero di attori per film
+SELECT f.film_id, f.title, COUNT(fa.actor_id) AS num_attori FROM sakila.film AS f
+	INNER JOIN sakila.film_actor AS fa ON f.film_id = fa.film_id
+    GROUP BY f.film_id;
+-- 2 -> selezione il numero massimo di attori per film
+SELECT MAX(num_attori) FROM (
+	SELECT f.film_id, f.title, COUNT(fa.actor_id) AS num_attori FROM sakila.film AS f
+	INNER JOIN sakila.film_actor AS fa ON f.film_id = fa.film_id
+    GROUP BY f.film_id
+) AS t;
+
+-- 3 -> unisco le due query precedetni per risolvere il problema
+SELECT * FROM (
+	SELECT f.film_id, f.title, COUNT(fa.actor_id) AS num_attori FROM sakila.film AS f
+		INNER JOIN sakila.film_actor AS fa ON f.film_id = fa.film_id
+		GROUP BY f.film_id
+) AS t
+	WHERE num_attori = (SELECT MAX(num_attori) FROM (
+		SELECT f.film_id, f.title, COUNT(fa.actor_id) AS num_attori FROM sakila.film AS f
+		INNER JOIN sakila.film_actor AS fa ON f.film_id = fa.film_id
+		GROUP BY f.film_id
+	) AS n
+) ORDER BY t.title;
+
+-- 4 -> Soluzione con utlizzo delle Viste
+USE sakila;
+CREATE OR REPLACE VIEW count_actor AS 
+	SELECT f.film_id, f.title, COUNT(fa.actor_id) AS num_attori FROM sakila.film AS f
+	INNER JOIN sakila.film_actor AS fa ON f.film_id = fa.film_id
+	GROUP BY f.film_id;
+    
+SELECT * FROM count_actor
+	WHERE num_attori = (SELECT MAX(num_attori) FROM count_actor);
+    
+DROP VIEW count_actor;
+
+-- Stored Procedures
+
+-- Stored Procedures senza parametri
+DELIMITER &&
+	CREATE PROCEDURE getAllFilms()
+    BEGIN
+		SELECT * FROM sakila.film;
+	END &&
+DELIMITER ;
+CALL getAllFilms();
+
+-- Stored Procedures con parametri di tipo input
+DELIMITER &&
+	CREATE PROCEDURE getNumFilm(IN num_row INT)
+    BEGIN
+		SELECT * FROM sakila.film LIMIT num_row;
+	END &&
+DELIMITER ;
+CALL getNumFilm(30)

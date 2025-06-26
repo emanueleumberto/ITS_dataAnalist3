@@ -236,6 +236,39 @@ COMMIT;
    [LIMIT n]
 */
 
+/*
+
+	View
+    CREATE [OR REPLACE] VIEW view_name AS 
+		SELECT [DISTINCT] column_name1, column_name2, ... column_nameN | * | aggregate_function(expression)
+		FROM table_name1
+        INNER | LEFT | RIGHT JOIN table_name2 ON condition
+        INNER | LEFT | RIGHT JOIN table_name3 ON condition
+        ...
+        INNER | LEFT | RIGHT JOIN table_nameN ON condition
+		[WHERE search_condition]
+		[GROUP BY]
+		[HAVING search_condition]
+		[ORDER BY]
+		[LIMIT n]
+	
+    SELECT * FROM view_name;
+    DROP VIEW [IF EXISTS] view_name
+        
+	Stored Procedures
+		
+	DELIMITER &&
+        CREATE PROCEDURE procedure_name [[IN | OUT | INOUT] parameter_name datatype ....]
+        BEGIN
+			....
+		END &&
+	DELIMITER;
+		
+	CALL procedure_name (parameter/s)
+	DROP PROCEDURE [IF EXISTS] procedure_name
+
+*/
+
 -- DDL -> DATABASE
 DROP DATABASE IF EXISTS test_db;
 CREATE DATABASE IF NOT EXISTS test_db;
