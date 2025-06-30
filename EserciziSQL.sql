@@ -574,4 +574,114 @@ DELIMITER &&
 		SELECT * FROM sakila.film LIMIT num_row;
 	END &&
 DELIMITER ;
-CALL getNumFilm(30)
+CALL getNumFilm(30);
+CALL getNumFilm(5);
+
+DELIMITER &&
+	CREATE PROCEDURE getNameAndLastnameByFilm(IN filmName VARCHAR(100))
+    BEGIN
+		SELECT CONCAT(a.first_name, ' ' , a.last_name) AS Actor_name 
+			FROM sakila.film AS f 
+			INNER JOIN sakila.film_actor AS fa ON f.film_id = fa.film_id
+			INNER JOIN sakila.actor AS a ON fa.actor_id = a.actor_id
+			WHERE f.title = filmName;
+    END &&
+DELIMITER ;
+CALL getNameAndLastnameByFilm('Alone Trip');
+CALL getNameAndLastnameByFilm('AFRICAN EGG');
+CALL getNameAndLastnameByFilm('ANGELS LIFE');
+CALL getNameAndLastnameByFilm('arizona bang');
+
+-- Stored Procedures con parametri di tipo output
+DELIMITER &&
+	CREATE PROCEDURE maxLengthFilm(OUT maxLength INT)
+	BEGIN
+		SELECT MAX(f.length) INTO maxLength FROM sakila.film AS f;
+    END &&
+DELIMITER ;
+CALL maxLengthFilm(@maxlengthFilm);
+SELECT @maxlengthFilm;
+
+-- Stored Procedures con parametri di tipo input e output
+DELIMITER &&
+	CREATE PROCEDURE getFilmNameByID(IN idFilm INT, OUT filmName VARCHAR(100))
+    BEGIN
+		SELECT f.title INTO filmName 
+			FROM sakila.film AS f WHERE f.film_id = idFilm;
+    END &&
+DELIMITER ;
+
+SET @idFilm = 5;
+CALL getFilmNameByID(@idFilm, @filmTitle);
+SELECT @filmTitle;
+CALL getNameAndLastnameByFilm(@filmTitle);
+
+-- Stored Procedures con parametro di tipo input e output
+DELIMITER &&
+	CREATE PROCEDURE getLengthFilmByID(INOUT numFilm INT)
+    BEGIN
+		SELECT f.length INTO numFilm 
+			FROM sakila.film AS f WHERE f.film_id = numFilm;
+	END &&
+DELIMITER ;
+
+SET @paramFilm = 17;
+CALL getLengthFilmByID(@paramFilm);
+SELECT @paramFilm;
+
+-- Esercizi Stored Procedures
+-- 1 -> creare una procedura che, dato un customer_id,  
+-- 		visualizzare id e data dei noleggi effettuati.
+DELIMITER &&
+	CREATE PROCEDURE customerRental(IN p_customer_id INT)
+    BEGIN
+		SELECT r.rental_id, r.rental_date 
+			FROM sakila.rental AS r 
+            WHERE r.customer_id = p_customer_id;
+    END &&
+DELIMITER ;
+CALL customerRental(23);
+
+-- 2 -> creare una procedura che elenca i noleggi avvenuti tra due date.
+
+DELIMITER &&
+	CREATE PROCEDURE rentalBetweenDate(IN p_start_date DATE, IN p_end_date DATE)
+    BEGIN
+		SELECT r.rental_id, r.rental_date, r.return_date, r.customer_id 
+			FROM sakila.rental AS r 
+			WHERE r.rental_date BETWEEN p_start_date AND p_end_date;
+    END &&
+DELIMITER ;
+CALL rentalBetweenDate('2005-05-24', '2005-05-26');
+
+-- 3 -> creare una procedura che inserisce un nuovo cliente 
+-- 		solo se non esiste già con stessa email.
+SELECT * FROM sakila.customer ORDER BY customer_id DESC;
+
+DELIMITER &&
+	CREATE PROCEDURE insertCustomer(
+							IN p_store_id INT,
+                            IN p_first_name VARCHAR(100),
+                            IN p_last_name VARCHAR(100),
+                            IN p_email VARCHAR(100),
+                            IN p_address_id INT)
+	BEGIN
+		IF NOT EXISTS (
+			SELECT * FROM sakila.customer AS c WHERE c.email = p_email
+		) THEN
+			INSERT INTO sakila.customer(store_id, first_name, 
+						last_name, email, address_id, create_date)
+			VALUES (p_store_id , UPPER(p_first_name), UPPER(p_last_name), p_email, 
+					p_address_id, NOW());
+			SELECT 'Cliente inserito con successo' AS messaggio;
+		ELSE 
+			SELECT 'Cliente già presente nel DB' AS messaggio;
+		END IF;
+	END &&
+DELIMITER ;
+CALL insertCustomer(1, 'Mario', 'Rossi', 'm.rossi@example.com', 47);
+CALL insertCustomer(2, 'Giuseppe', 'Verdi', 'g.verdi@example.com', 24);
+
+
+
+

@@ -266,8 +266,45 @@ COMMIT;
 		
 	CALL procedure_name (parameter/s)
 	DROP PROCEDURE [IF EXISTS] procedure_name
+    
+    Custom Function
+    
+    DETERMINISTIC -> La funzione restituisce sempre lo stesso valore quando 
+					 viene invocata con gli stessi paramentri di input
+	NOT DETERMINISTIC -> La funzione può restituire risultati diversi 
+						 con gli stessi valori di input (NOW(), RAND())
+						
+    DELIMITER &&
+    CREATE FUNCTION function_name(parameter_name datatype, ...)
+		[RETURNS datatype]
+        [NOT] DETERMINISTIC 
+        BEGIN
+			...
+		END &&
+	DELEIMITER ;
+    
+    SELECT function_name()
+    DROP FUNCTION [IF EXISTS] function_name
+    
+    -- Esempio Deterministic
+		DELIMITER &&
+			CREATE FUNCTION calcolaIva(prezzo DECIMAL(10,2))
+				RETURNS DECIMAL(10,2)
+				DETERMINISTIC
+				RETURN prezzo + (prezzo * 0.22);
+		DELIMITER ;
+
+	-- Esempio Not Deterministic
+		DELIMITER &&
+			CREATE FUNCTION calcolaOraLegale(ora INT)
+				RETURNS DATE
+				NOT DETERMINISTIC
+				RETURN CONCAT(HOUR(NOW()) + ora, '-', MINUTE(NOW()), '-', SECOND(NOW())) 
+		DELIMITER ;
+    
 
 */
+
 
 -- DDL -> DATABASE
 DROP DATABASE IF EXISTS test_db;
