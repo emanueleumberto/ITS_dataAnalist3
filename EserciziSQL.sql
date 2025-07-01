@@ -682,6 +682,33 @@ DELIMITER ;
 CALL insertCustomer(1, 'Mario', 'Rossi', 'm.rossi@example.com', 47);
 CALL insertCustomer(2, 'Giuseppe', 'Verdi', 'g.verdi@example.com', 24);
 
+-- Esempio Funzione
+DELIMITER &&
+	CREATE FUNCTION durataFilm(film_length INT)
+		RETURNS VARCHAR (25)
+        DETERMINISTIC
+        BEGIN
+			DECLARE duration VARCHAR(25);
+            IF(film_length <= 75) THEN 
+				SET duration = 'Film Corto';
+			ELSEIF (film_length <= 150) THEN
+				SET duration = 'Film Medio';
+			ELSE
+				SET duration = 'Film Lungo';
+			END IF;
+            RETURN duration;
+        END &&
+DELIMITER ;
+
+SELECT durataFilm(180);
+SELECT * FROM sakila.film;
+SELECT title, length, durataFilm(length) FROM sakila.film;
+SELECT title, length FROM sakila.film WHERE durataFilm(length) = 'Film Lungo';
+
+
+
+
+
 
 
 

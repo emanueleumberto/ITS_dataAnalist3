@@ -291,19 +291,35 @@ COMMIT;
 			CREATE FUNCTION calcolaIva(prezzo DECIMAL(10,2))
 				RETURNS DECIMAL(10,2)
 				DETERMINISTIC
-				RETURN prezzo + (prezzo * 0.22);
+                BEGIN
+					RETURN prezzo + (prezzo * 0.22);
+				END &&
 		DELIMITER ;
 
 	-- Esempio Not Deterministic
 		DELIMITER &&
 			CREATE FUNCTION calcolaOraLegale(ora INT)
-				RETURNS DATE
+				RETURNS TIME
 				NOT DETERMINISTIC
-				RETURN CONCAT(HOUR(NOW()) + ora, '-', MINUTE(NOW()), '-', SECOND(NOW())) 
+                BEGIN
+					RETURN CONCAT(HOUR(NOW()) + ora, '-', MINUTE(NOW()), '-', SECOND(NOW())) 
+				END &&
 		DELIMITER ;
+    SELECT calcolaOraLegale(1)
     
+    DELIMITER &&
+	CREATE FUNCTION calcolaOraLegale(ora INT)
+		RETURNS VARCHAR(100)
+		NOT DETERMINISTIC
+        BEGIN
+			RETURN CONCAT(HOUR(NOW()) + ora, '-', MINUTE(NOW()), '-', SECOND(NOW()));
+		END &&
+DELIMITER ;
+SELECT calcolaOraLegale(1);
 
 */
+
+
 
 
 -- DDL -> DATABASE
