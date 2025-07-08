@@ -45,6 +45,7 @@ Gestire le eccezioni per garantire che l'input dell'utente sia valido.
 """
 
 import mysql.connector as mc
+from datetime import datetime
 
 db = mc.connect(
     host='localhost',
@@ -96,6 +97,7 @@ create_table_books()
 create_table_users()
 create_table_loans()
 
+# CRUD Book
 # Aggiungi libro:Implementare una funzione che consente di aggiungere un nuovo libro alla collezione.
 def addBook():
     title = input('Inserisci titolo:') or 'Follia'
@@ -149,7 +151,97 @@ def updateBook():
     else:
         print(f'Libro non trovato!')
 
+# Elimina libro: Implementare una funzione per rimuovere un libro dalla collezione.
+def deleteBook():
+    id = int(input('Inserisci il codice univoco del libro da eliminare:'))
+    book = book_detail(id)
+    if book:
+        sql = 'DELETE FROM books WHERE book_id = %s'
+        values = (book[0],)
+        cursor.execute(sql, values)
+        db.commit()
+        if cursor.rowcount > 0:
+            print(f'Libro {book[1]} eliminato!!')
+        else:
+            print(f'Errore!')    
+    else:
+        print(f'Libro non trovato!')    
+
+def search_book():
+    scelta = input('Inserisci titolo o autore:')
+    sql = 'SELECT * FROM books WHERE title LIKE %s OR author LIKE %s'
+    values = ('%'+scelta+'%','%'+scelta+'%')
+    cursor.execute(sql, values)
+    books = cursor.fetchall()
+    for book in books:
+        stato = 'Disponibile' if book[5] else 'Non Disponibile'
+        print(f"{book[0]} -> {book[1]} ({book[2]}) anno di pubblicazione: {book[3]} Genere: {book[4]} Stato: {stato}")
+
+# CRUD User
+def addUser():
+    firstname = input('Inserisci nome utente:')
+    lastname = input('Inserisci cognome utente:')
+    age = int(input('Inserisci anni:'))
+    email = input('Inserisci email:')
+    phone = input('Inserisci telefono:')
+
+    sql = 'INSERT INTO users (firstname,lastname,age,email,phone)\
+            VALUES (%s, %s, %s, %s, %s)'
+    values = (firstname, lastname, age, email, phone)
+    cursor.execute(sql, values)
+    db.commit()
+    if cursor._last_insert_id:
+        print(f'Utente {firstname} {lastname} salvato nel DB!')
+    else:
+        print(f'Errore di salvataggio!!!')     
+
+def viewUser():
+    sql = 'SELECT * FROM users'
+    cursor.execute(sql)
+    users = cursor.fetchall()
+
+    for user in users:
+        print(f"{user[0]} -> {user[1]} {user[2]} anni: {user[3]} Email: {user[4]} Telefono: {user[5]}")
+
+def user_detail(id):
+    sql = 'SELECT * FROM users WHERE user_id = %s'
+    cursor.execute(sql,(id,))
+    user = cursor.fetchone()
+    # print(user)
+    return user
+
+
+# Prestito
+def loan_book():
+    print('******** Elenco libri ***********')
+    viewBooks()
+    scelta_book = input('Inserisci il libro che vuoi prendere in prestito:')
+    print('******** Elenco utenti ***********')
+    viewUser()
+    scelta_user = input('Inserisci Utente:')
+    
+    # data_prestito = datetime.now().strftime("%d/%m/%Y, %H:%M:%S")
+    book = book_detail(scelta_book)
+    user = user_detail(scelta_user)
+   
+    sql = 'INSERT INTO loans (book_id, user_id) VALUES (%s, %s)'
+    values = (book[0], user[0])
+    cursor.execute(sql, values)
+    db.commit()
+    if cursor._last_insert_id:
+        print(f'Prestito salvato nel DB!')
+    else:
+        print(f'Errore di salvataggio!!!')
+
 # addBook()
 # viewBooks()
 # book_detail(2)
 # updateBook()
+# deleteBook()
+# search_book()
+
+# addUser()
+# viewUser()
+# user_detail(1)
+
+loan_book()
