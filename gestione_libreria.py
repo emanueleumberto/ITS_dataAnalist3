@@ -195,7 +195,7 @@ def addUser():
     else:
         print(f'Errore di salvataggio!!!')     
 
-def viewUser():
+def viewUsers():
     sql = 'SELECT * FROM users'
     cursor.execute(sql)
     users = cursor.fetchall()
@@ -217,7 +217,7 @@ def loan_book():
     viewBooks()
     scelta_book = input('Inserisci il libro che vuoi prendere in prestito:')
     print('******** Elenco utenti ***********')
-    viewUser()
+    viewUsers()
     scelta_user = input('Inserisci Utente:')
     
     # data_prestito = datetime.now().strftime("%d/%m/%Y, %H:%M:%S")
@@ -229,9 +229,24 @@ def loan_book():
     cursor.execute(sql, values)
     db.commit()
     if cursor._last_insert_id:
-        print(f'Prestito salvato nel DB!')
+        print(f'Prestito salvato nel DB!') 
+        sql = 'UPDATE books SET available = %s WHERE book_id = %s'
+        values = (False, book[0])
+        cursor.execute(sql, values)
+        db.commit()
     else:
         print(f'Errore di salvataggio!!!')
+
+def view_loans():
+    sql = 'SELECT l.loan_id, l.loan_date, b.title, b.author, b.publication_year,\
+        b.genre, u.firstname, u.lastname, u.age, u.email, u.phone\
+	    FROM libreria_db.loans AS l\
+	    INNER JOIN libreria_db.books AS b ON l.book_id = b.book_id\
+        INNER JOIN libreria_db.users AS u ON l.user_id = u.user_id'
+    cursor.execute(sql)
+    loans = cursor.fetchall()
+    for loan in loans:
+        print(f'{loan[0]} -> Data prestito {loan[1]} Titolo: {loan[2]} Autore: {loan[3]} Genere: {loan[5]} Utente: {loan[6]} {loan[7]}')
 
 # addBook()
 # viewBooks()
@@ -244,4 +259,5 @@ def loan_book():
 # viewUser()
 # user_detail(1)
 
-loan_book()
+# loan_book()
+# view_loans()
